@@ -2,6 +2,8 @@ import type { AWS } from "@serverless/typescript";
 
 import hello from "@functions/hello";
 import getVideos from "@functions/getVideos";
+import getVideoCaption from "@functions/getVideoCaption";
+import getVideoInfo from "@functions/getVideoInfo";
 
 const serverlessConfiguration: AWS = {
   service: "learn-language-backend",
@@ -32,7 +34,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { hello, getVideos },
+  functions: { hello, getVideos, getVideoCaption, getVideoInfo },
   package: { individually: true },
   custom: {
     esbuild: {
