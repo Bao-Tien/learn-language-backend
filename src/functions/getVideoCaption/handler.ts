@@ -9,13 +9,13 @@ const lambda = new Lambda();
 const lambdaFunction: ValidatedEventAPIGatewayProxyEvent<
   typeof schema
 > = async (event) => {
-  const videoUrl = event.body.videoUrl;
+  const videoId = event.body.videoId;
   const txtData = await lambda
     .invoke({
       FunctionName: "python-youtube-dev-youtubeGetVideoCaption",
       InvocationType: "RequestResponse",
       LogType: "None",
-      Payload: JSON.stringify({ videoUrl }),
+      Payload: JSON.stringify({ videoId }),
     })
     .promise();
 

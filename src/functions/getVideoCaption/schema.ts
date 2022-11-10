@@ -3,5 +3,5 @@ export default {
   properties: {
     videoUrl: { type: "string" },
   },
-  required: ["videoUrl"],
+  required: ["videoId"],
 } as const;
