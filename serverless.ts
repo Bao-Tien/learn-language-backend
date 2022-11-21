@@ -4,6 +4,11 @@ import hello from "@functions/hello";
 import getVideos from "@functions/getVideos";
 import getVideoCaption from "@functions/getVideoCaption";
 import getVideoInfo from "@functions/getVideoInfo";
+import getFolders from "@functions/getFolders";
+import getFolderDetails from "@functions/getFolderDetails";
+import createFolder from "@functions/createFolder";
+import updateFolder from "@functions/updateFolder";
+import deleteFolder from "@functions/deleteFolder";
 
 const serverlessConfiguration: AWS = {
   service: "learn-language-backend",
@@ -34,7 +39,17 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { hello, getVideos, getVideoCaption, getVideoInfo },
+  functions: {
+    hello,
+    getVideos,
+    getVideoCaption,
+    getVideoInfo,
+    getFolders,
+    getFolderDetails,
+    createFolder,
+    updateFolder,
+    deleteFolder,
+  },
   package: { individually: true },
   custom: {
     esbuild: {
