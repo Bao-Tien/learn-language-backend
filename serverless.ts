@@ -9,6 +9,9 @@ import getFolderDetails from "@functions/getFolderDetails";
 import createFolder from "@functions/createFolder";
 import updateFolder from "@functions/updateFolder";
 import deleteFolder from "@functions/deleteFolder";
+import createWord from "@functions/createWord";
+import deleteWord from "@functions/deleteWord";
+import updateWord from "@functions/updateWord";
 
 const serverlessConfiguration: AWS = {
   service: "learn-language-backend",
@@ -49,6 +52,9 @@ const serverlessConfiguration: AWS = {
     createFolder,
     updateFolder,
     deleteFolder,
+    createWord,
+    deleteWord,
+    updateWord,
   },
   package: { individually: true },
   custom: {
@@ -61,6 +67,60 @@ const serverlessConfiguration: AWS = {
       define: { "require.resolve": undefined },
       platform: "node",
       concurrency: 10,
+    },
+  },
+  resources: {
+    Resources: {
+      ImageDoAn2Bucket: {
+        Type: "AWS::S3::Bucket",
+        Properties: {
+          CorsConfiguration: {
+            CorsRules: [
+              {
+                AllowedOrigins: ["*"],
+                AllowedHeaders: ["*"],
+                AllowedMethods: ["GET", "PUT", "POST", "DELETE", "HEAD"],
+                MaxAge: 3000,
+              },
+            ],
+          },
+          PublicAccessBlockConfiguration: {
+            BlockPublicAcls: false,
+            BlockPublicPolicy: false,
+            IgnorePublicAcls: false,
+            RestrictPublicBuckets: false,
+          },
+        },
+      },
+      ImageDoAn2BucketBucketPolicy: {
+        Type: "AWS::S3::BucketPolicy",
+        Properties: {
+          Bucket: { Ref: "ImageDoAn2Bucket" },
+          PolicyDocument: {
+            Version: "2012-10-17",
+            Statement: [
+              {
+                Effect: "Allow",
+                Principal: "*",
+                Action: ["s3:GetObject"],
+                Resource: {
+                  "Fn::Join": [
+                    "",
+                    ["arn:aws:s3:::", { Ref: "ImageDoAn2Bucket" }, "/*"],
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+    Outputs: {
+      AttachmentsBucketName: {
+        Value: {
+          Ref: "ImageDoAn2Bucket",
+        },
+      },
     },
   },
 };

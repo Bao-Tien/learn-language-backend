@@ -8,15 +8,18 @@ import schema from "./schema";
 const lambdaFunction: ValidatedEventAPIGatewayProxyEvent<
   typeof schema
 > = async (event) => {
-  await initConnectionToDatabase(); //can thiet ko
+  await initConnectionToDatabase();
 
   const folderRepository = AppDataSource.getRepository(Folder);
   const folderToDelete = await folderRepository.findOneBy({
     id: event.body.id,
   });
-  await folderRepository.remove(folderToDelete);
-
-  return formatJSONResponse({ folderToDelete }); //can thiet ko
+  if (folderToDelete) {
+    await folderRepository.remove(folderToDelete);
+    return formatJSONResponse({ result: folderToDelete });
+  } else {
+    return formatJSONResponse({ result: "Can't find folder" });
+  }
 };
 
 export const main = middyfy(lambdaFunction);

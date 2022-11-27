@@ -1,5 +1,5 @@
 import { initConnectionToDatabase, AppDataSource } from "@db/AppSource";
-import { Folder } from "@db/entites/Folder";
+import { Word } from "@db/entites/Word";
 import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
 import { formatJSONResponse } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
@@ -10,14 +10,16 @@ const lambdaFunction: ValidatedEventAPIGatewayProxyEvent<
 > = async (event) => {
   await initConnectionToDatabase();
 
-  const folderRepository = AppDataSource.getRepository(Folder);
-  const folderToUpdate = await folderRepository.findOneBy({
-    id: event.body.id,
+  const wordRepository = AppDataSource.getRepository(Word);
+  const wordToDelete = await wordRepository.findOneBy({
+    id: event.body.wordId,
   });
-  folderToUpdate.name = event.body.name;
-  await folderRepository.save(folderToUpdate);
-
-  return formatJSONResponse({ folderToUpdate });
+  if (wordToDelete) {
+    await wordRepository.remove(wordToDelete);
+    return formatJSONResponse({ result: wordToDelete });
+  } else {
+    return formatJSONResponse({ result: "Can't find folder" });
+  }
 };
 
 export const main = middyfy(lambdaFunction);

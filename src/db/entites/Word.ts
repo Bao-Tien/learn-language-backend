@@ -20,9 +20,11 @@ export class Word extends BaseEntity {
   back: string;
 
   @Column({ type: "int" })
-  folderId: string;
+  folderId: number;
 
-  @ManyToOne(() => Folder, (folder) => folder.words)
+  @ManyToOne(() => Folder, (folder) => folder.words, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "folderId" })
   folder: Folder;
 }
