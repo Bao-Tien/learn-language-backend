@@ -14,6 +14,8 @@ const lambdaFunction: ValidatedEventAPIGatewayProxyEvent<
   word.front = event.body.front;
   word.back = event.body.back;
   word.folderId = event.body.folderId;
+  word.frontImageUrl = event.body.frontImageUrl ?? ""; // A
+  word.backImageUrl = event.body.backImageUrl ?? ""; // B
 
   const wordRepository = AppDataSource.getRepository(Word);
   await wordRepository.save(word);

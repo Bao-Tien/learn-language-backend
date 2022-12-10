@@ -19,6 +19,12 @@ export class Word extends BaseEntity {
   @Column({ type: "text" })
   back: string;
 
+  @Column({ type: "text" })
+  frontImageUrl: string;
+
+  @Column({ type: "text" })
+  backImageUrl: string;
+
   @Column({ type: "int" })
   folderId: number;
 

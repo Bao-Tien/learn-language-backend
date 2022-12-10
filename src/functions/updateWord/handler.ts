@@ -14,8 +14,9 @@ const lambdaFunction: ValidatedEventAPIGatewayProxyEvent<
   const wordToUpdate = await wordRepository.findOneBy({
     id: event.body.id,
   });
-  wordToUpdate.front = event.body.front;
-  wordToUpdate.back = event.body.back;
+  for (const [key, value] of Object.entries(event.body)) {
+    wordToUpdate[key] = value;
+  }
   await wordRepository.save(wordToUpdate);
 
   return formatJSONResponse({ wordToUpdate });

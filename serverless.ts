@@ -12,6 +12,7 @@ import deleteFolder from "@functions/deleteFolder";
 import createWord from "@functions/createWord";
 import deleteWord from "@functions/deleteWord";
 import updateWord from "@functions/updateWord";
+import getUploadUrl from "@functions/getUploadUrl";
 
 const serverlessConfiguration: AWS = {
   service: "learn-language-backend",
@@ -42,6 +43,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
+  // Khai bao Lambda
   functions: {
     hello,
     getVideos,
@@ -55,6 +57,7 @@ const serverlessConfiguration: AWS = {
     createWord,
     deleteWord,
     updateWord,
+    getUploadUrl,
   },
   package: { individually: true },
   custom: {
