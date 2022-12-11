@@ -13,6 +13,7 @@ import createWord from "@functions/createWord";
 import deleteWord from "@functions/deleteWord";
 import updateWord from "@functions/updateWord";
 import getUploadUrl from "@functions/getUploadUrl";
+import textToSpeech from "@functions/textToSpeech";
 
 const serverlessConfiguration: AWS = {
   service: "learn-language-backend",
@@ -58,6 +59,7 @@ const serverlessConfiguration: AWS = {
     deleteWord,
     updateWord,
     getUploadUrl,
+    textToSpeech,
   },
   package: { individually: true },
   custom: {

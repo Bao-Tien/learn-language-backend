@@ -12,20 +12,21 @@ const lambdaFunction: ValidatedEventAPIGatewayProxyEvent<
 > = async (event) => {
   const Key = `${uuidv4()}.jpg`;
 
-  // Get signed URL from S3
   const s3Params = {
     Bucket: "learn-language-backend-dev-imagedoan2bucket-13smmgrkxyg9o",
-    Key: Key,
+    Key: "images/" + Key,
     Expires: 300,
     ContentType: event.body.contentType,
   };
 
+  // Get signed URL from S3
   const uploadUrl = s3.getSignedUrl("putObject", s3Params);
 
   return formatJSONResponse({
     uploadUrl: uploadUrl,
     imageUrl:
       "https://learn-language-backend-dev-imagedoan2bucket-13smmgrkxyg9o.s3.ap-southeast-1.amazonaws.com/" +
+      "images/" +
       Key,
   });
 };
