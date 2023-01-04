@@ -1,42 +1,44 @@
-import type { AWS } from "@serverless/typescript";
+import type { AWS } from '@serverless/typescript'
 
-import hello from "@functions/hello";
-import getVideos from "@functions/getVideos";
-import getVideoCaption from "@functions/getVideoCaption";
-import getVideoInfo from "@functions/getVideoInfo";
-import getFolders from "@functions/getFolders";
-import getFolderDetails from "@functions/getFolderDetails";
-import createFolder from "@functions/createFolder";
-import updateFolder from "@functions/updateFolder";
-import deleteFolder from "@functions/deleteFolder";
-import createWord from "@functions/createWord";
-import deleteWord from "@functions/deleteWord";
-import updateWord from "@functions/updateWord";
-import getUploadUrl from "@functions/getUploadUrl";
-import textToSpeech from "@functions/textToSpeech";
+import hello from '@functions/hello'
+import getVideos from '@functions/getVideos'
+import getVideoCaption from '@functions/getVideoCaption'
+import getVideoInfo from '@functions/getVideoInfo'
+import getFolders from '@functions/getFolders'
+import getFolderDetails from '@functions/getFolderDetails'
+import createFolder from '@functions/createFolder'
+import updateFolder from '@functions/updateFolder'
+import deleteFolder from '@functions/deleteFolder'
+import createWord from '@functions/createWord'
+import deleteWord from '@functions/deleteWord'
+import updateWord from '@functions/updateWord'
+import getUploadUrl from '@functions/getUploadUrl'
+import textToSpeech from '@functions/textToSpeech'
+import auth from '@functions/auth'
+import authTokenValidation from '@functions/authTokenValidation'
 
 const serverlessConfiguration: AWS = {
-  service: "learn-language-backend",
-  frameworkVersion: "3",
-  plugins: ["serverless-esbuild", "serverless-offline"],
+  service: 'learn-language-backend',
+  frameworkVersion: '3',
+  plugins: ['serverless-esbuild', 'serverless-offline', 'serverless-dotenv-plugin'],
   provider: {
-    name: "aws",
-    region: "ap-southeast-1",
-    runtime: "nodejs14.x",
+    name: 'aws',
+    region: 'ap-southeast-1',
+    runtime: 'nodejs14.x',
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
     },
     environment: {
-      AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
-      NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
+      AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
     },
     iam: {
       role: {
         statements: [
           {
-            Effect: "Allow",
-            Action: ["*"],
+            Effect: 'Allow',
+            Action: ['*'],
             Resource: `*`,
           },
         ],
@@ -60,6 +62,8 @@ const serverlessConfiguration: AWS = {
     updateWord,
     getUploadUrl,
     textToSpeech,
+    auth,
+    authTokenValidation,
   },
   package: { individually: true },
   custom: {
@@ -67,24 +71,24 @@ const serverlessConfiguration: AWS = {
       bundle: true,
       minify: false,
       sourcemap: true,
-      exclude: ["aws-sdk"],
-      target: "node14",
-      define: { "require.resolve": undefined },
-      platform: "node",
+      exclude: ['aws-sdk'],
+      target: 'node14',
+      define: { 'require.resolve': undefined },
+      platform: 'node',
       concurrency: 10,
     },
   },
   resources: {
     Resources: {
       ImageDoAn2Bucket: {
-        Type: "AWS::S3::Bucket",
+        Type: 'AWS::S3::Bucket',
         Properties: {
           CorsConfiguration: {
             CorsRules: [
               {
-                AllowedOrigins: ["*"],
-                AllowedHeaders: ["*"],
-                AllowedMethods: ["GET", "PUT", "POST", "DELETE", "HEAD"],
+                AllowedOrigins: ['*'],
+                AllowedHeaders: ['*'],
+                AllowedMethods: ['GET', 'PUT', 'POST', 'DELETE', 'HEAD'],
                 MaxAge: 3000,
               },
             ],
@@ -98,21 +102,18 @@ const serverlessConfiguration: AWS = {
         },
       },
       ImageDoAn2BucketBucketPolicy: {
-        Type: "AWS::S3::BucketPolicy",
+        Type: 'AWS::S3::BucketPolicy',
         Properties: {
-          Bucket: { Ref: "ImageDoAn2Bucket" },
+          Bucket: { Ref: 'ImageDoAn2Bucket' },
           PolicyDocument: {
-            Version: "2012-10-17",
+            Version: '2012-10-17',
             Statement: [
               {
-                Effect: "Allow",
-                Principal: "*",
-                Action: ["s3:GetObject"],
+                Effect: 'Allow',
+                Principal: '*',
+                Action: ['s3:GetObject'],
                 Resource: {
-                  "Fn::Join": [
-                    "",
-                    ["arn:aws:s3:::", { Ref: "ImageDoAn2Bucket" }, "/*"],
-                  ],
+                  'Fn::Join': ['', ['arn:aws:s3:::', { Ref: 'ImageDoAn2Bucket' }, '/*']],
                 },
               },
             ],
@@ -123,11 +124,11 @@ const serverlessConfiguration: AWS = {
     Outputs: {
       AttachmentsBucketName: {
         Value: {
-          Ref: "ImageDoAn2Bucket",
+          Ref: 'ImageDoAn2Bucket',
         },
       },
     },
   },
-};
+}
 
-module.exports = serverlessConfiguration;
+module.exports = serverlessConfiguration

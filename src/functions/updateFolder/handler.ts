@@ -1,7 +1,7 @@
 import { initConnectionToDatabase, AppDataSource } from "@db/AppSource";
 import { Folder } from "@db/entites/Folder";
 import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
-import { formatJSONResponse } from "@libs/api-gateway";
+import { formatJSONSuccessResponse } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
 import schema from "./schema";
 
@@ -17,7 +17,7 @@ const lambdaFunction: ValidatedEventAPIGatewayProxyEvent<
   folderToUpdate.name = event.body.name;
   await folderRepository.save(folderToUpdate);
 
-  return formatJSONResponse({ folderToUpdate });
+  return formatJSONSuccessResponse({ folderToUpdate });
 };
 
 export const main = middyfy(lambdaFunction);

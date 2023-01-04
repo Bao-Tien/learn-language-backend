@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm";
 import { Folder } from "./entites/Folder";
+import { User } from "./entites/User";
 import { Word } from "./entites/Word";
 
 export const AppDataSource = new DataSource({
@@ -11,7 +12,7 @@ export const AppDataSource = new DataSource({
   database: "learning_languages",
   synchronize: true,
   logging: true,
-  entities: [Folder, Word],
+  entities: [Folder, Word, User],
   subscribers: [],
   migrations: [],
 });

@@ -1,20 +1,25 @@
-import { Word } from "./Word";
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Word } from './Word'
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { User } from './User'
 
-@Entity("folder") // Table name
+@Entity('folder') // Table name
 export class Folder extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
-  @Column({ type: "text" })
-  name: string;
+  @Column({ type: 'text' })
+  name: string
 
-  @OneToMany(() => Word, (word) => word.folder)
-  words: Word[];
+  @Column({ type: 'int' })
+  userId: number
+
+  // Relations
+  @OneToMany(() => Word, (word) => word.Folder)
+  words: Word[]
+
+  @ManyToOne(() => User, (user) => user.Folders, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'userId' })
+  User: User
 }

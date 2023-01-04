@@ -1,7 +1,7 @@
 import { initConnectionToDatabase, AppDataSource } from "@db/AppSource";
 import { Word } from "@db/entites/Word";
 import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
-import { formatJSONResponse } from "@libs/api-gateway";
+import { formatJSONSuccessResponse } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
 import schema from "./schema";
 
@@ -20,7 +20,7 @@ const lambdaFunction: ValidatedEventAPIGatewayProxyEvent<
   const wordRepository = AppDataSource.getRepository(Word);
   await wordRepository.save(word);
 
-  return formatJSONResponse({ word });
+  return formatJSONSuccessResponse({ word });
 };
 
 export const main = middyfy(lambdaFunction);

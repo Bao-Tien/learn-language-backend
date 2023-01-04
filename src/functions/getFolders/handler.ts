@@ -1,17 +1,26 @@
-import { AppDataSource, initConnectionToDatabase } from "@db/AppSource";
-import { Folder } from "@db/entites/Folder";
-import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
-import { formatJSONResponse } from "@libs/api-gateway";
-import { middyfy } from "@libs/lambda";
-import schema from "./schema";
+import { AppDataSource, initConnectionToDatabase } from '@db/AppSource'
+import { Folder } from '@db/entites/Folder'
+import { formatJSONErrorResponse, ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway'
+import { formatJSONSuccessResponse } from '@libs/api-gateway'
+import { middyfy } from '@libs/lambda'
+import { IAuthData } from 'src/interfaces/AuthData'
+import schema from './schema'
 
-const lambdaFunction: ValidatedEventAPIGatewayProxyEvent<
-  typeof schema
-> = async () => {
-  await initConnectionToDatabase();
-  const folderRepository = AppDataSource.getRepository(Folder);
-  const allFolders = await folderRepository.find();
-  return formatJSONResponse({ allFolders });
-};
+const lambdaFunction: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event, context) => {
+  await initConnectionToDatabase()
+  const strAuthData = event.requestContext?.authorizer?.authData
 
-export const main = middyfy(lambdaFunction);
+  if (strAuthData) {
+    const authData: IAuthData = JSON.parse(strAuthData)
+    const allFolders = await Folder.find({
+      where: {
+        userId: authData.id,
+      },
+    })
+    return formatJSONSuccessResponse({ allFolders })
+  } else {
+    return formatJSONErrorResponse({ message: 'Please sign-in before using this feature' })
+  }
+}
+
+export const main = middyfy(lambdaFunction)

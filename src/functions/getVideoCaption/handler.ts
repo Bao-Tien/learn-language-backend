@@ -1,5 +1,5 @@
 import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
-import { formatJSONResponse } from "@libs/api-gateway";
+import { formatJSONSuccessResponse } from "@libs/api-gateway";
 import { middyfy } from "@libs/lambda";
 import schema from "./schema";
 import { Lambda } from "aws-sdk";
@@ -21,7 +21,7 @@ const lambdaFunction: ValidatedEventAPIGatewayProxyEvent<
 
   const jsonData = JSON.parse(txtData.Payload.toString());
 
-  return formatJSONResponse(jsonData);
+  return formatJSONSuccessResponse(jsonData);
 };
 
 export const main = middyfy(lambdaFunction);

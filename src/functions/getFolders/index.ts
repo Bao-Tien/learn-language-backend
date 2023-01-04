@@ -1,14 +1,15 @@
-import { handlerPath } from "@libs/handler-resolver";
+import { handlerPath } from '@libs/handler-resolver'
 
 export default {
   handler: `${handlerPath(__dirname)}/handler.main`,
   events: [
     {
       http: {
-        method: "get",
+        method: 'get',
         cors: true,
-        path: "getFolders",
+        path: 'getFolders',
+        authorizer: 'authTokenValidation',
       },
     },
   ],
-};
+}
